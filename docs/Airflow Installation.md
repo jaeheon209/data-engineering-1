@@ -13,9 +13,8 @@ sudo apt-get install -y python3-pip
 
 #### Next install Airflow and other Python modules we need
 
-This doesn't work due to a bug reported at https://github.com/apache/airflow/issues/11965
 ```
-sudo pip3 install apache-airflow==1.10.12 --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-1.10.12/constraints-3.7.txt"
+sudo pip3 install apache-airflow==1.10.13
 sudo pip3 install cryptography psycopg2-binary boto3 botocore 
 ```
 
@@ -34,9 +33,7 @@ sudo su airflow
 ```
 
 
-## (Optional) Local Postgres Installation to store Airflow related info (DAGs, Tasks, Variables, Connections and so on)
-
-We don't need this section for the lab session since you will be given pre-created account but if you need to set up a Postgres DB locally, here is what you need.
+## Local Postgres Installation to store Airflow related info (DAGs, Tasks, Variables, Connections and so on)
 
 By default, Airflow will be launced with a SQLite database which is a single thread. Will change this to use a more performant database such as Postgres later.
 
@@ -63,6 +60,8 @@ $ exit
 
 #### Restart Postgres
 
+Move back to Ubuntu account by running "exit"
+
 ```
 sudo service postgresql restart
 ```
@@ -85,7 +84,6 @@ airflow.cfg  airflow.db  dags   logs  unittests.cfg
 
  * change the "executor" to LocalExecutor from SequentialExecutor
  * change the db connection string ("sql_alchemy_conn") to point to the local Postgres installed above or a new one provided to you
-   * Here you need to use the ID, HOST, PASSWORD and DATABASE assigned to you
    * If you are going to use a locally installed Postgres DB here (like explained above), use airflow for ID, PASSWORD and DATABASE and use localhost for HOST
  * change Loadexample setting to False
  
@@ -94,7 +92,7 @@ airflow.cfg  airflow.db  dags   logs  unittests.cfg
 ...
 executor = LocalExecutor
 ...
-sql_alchemy_conn = postgresql+psycopg2://ID:PASSWORD@HOST:5432/DATABASE
+sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@localhost:5432/airflow
 ...
 load_examples = False
 ```
