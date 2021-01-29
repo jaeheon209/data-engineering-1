@@ -1,4 +1,6 @@
-These instructions are about installing Airflow on a Ubuntu server (not using Docker). We will be using Python 3. Python 2 is sunsetting
+These instructions are about installing Airflow on a Ubuntu server (not using Docker). We will be using Python 3. Python 2 is sunsetting.
+
+Airflow version 1.10.12 will be used not Airflow 2.0 yet.
 
 ## Airflow Python Module Installation
 
