@@ -221,7 +221,7 @@ authenticate = True
 auth_backend = airflow.contrib.auth.backends.password_auth
 ```
 
-Now time to create a user for Airflow login. Copy and paste the following code as /var/lib/airflow/createUser.py as airflow user:
+Now time to create a user for Airflow login. Open a new file in /var/lib/airflow/createUser.py and copy&paste the following code:
 
 ```
 import airflow
