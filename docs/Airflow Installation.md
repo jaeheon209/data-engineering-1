@@ -188,6 +188,27 @@ cp -r data-engineering/dags/* dags
 Visit your Airflow Web UI and we should see the DAGs from the repo. Some will have errors displayed and you need to add some variables and connections according to the slides 23 to 25 and 30 of "Airflow Deep-dive" preso.
 
 
+## Set AIRFLOW_HOME environment variable in ~/.bashrc (/var/lib/airflow/.bashrc)
+
+Once you switch to airflow user (sudo su airflow), edit ~/.bashrc or /var/lib/airflow/.bashrc and append the following lines to the end of the file:
+
+```
+AIRFLOW_HOME=/var/lib/airflow
+export AIRFLOW_HOME
+
+cd ~/
+```
+
+Log out of airflow user and log in again (sudo su airflow). Now you will start from the home directory. Also if you print out AIRFLOW_HOME environment variable, you will see it is set properly.
+```
+ubuntu@ip-172-31-54-137:~$ sudo su airflow
+airflow@ip-172-31-54-137:~/$ pwd
+/var/lib/airflow
+airflow@ip-172-31-54-137:~/$ echo $AIRFLOW_HOME
+/var/lib/airflow
+```
+
+
 ## Add authentication to Airflow Webserver
 
 
@@ -248,24 +269,4 @@ AIRFLOW_HOME=/var/lib/airflow python3 createUser.py
 Last but not least restart the webserver as ubuntu user:
 ```
 sudo systemctl restart airflow-webserver
-```
-
-## Set AIRFLOW_HOME environment variable in ~/.bashrc (/var/lib/airflow/.bashrc)
-
-Once you switch to airflow user (sudo su airflow), edit ~/.bashrc or /var/lib/airflow/.bashrc and append the following lines to the end of the file:
-
-```
-AIRFLOW_HOME=/var/lib/airflow
-export AIRFLOW_HOME
-
-cd ~/
-```
-
-Log out of airflow user and log in again (sudo su airflow). Now you will start from the home directory. Also if you print out AIRFLOW_HOME environment variable, you will see it is set properly.
-```
-ubuntu@ip-172-31-54-137:~$ sudo su airflow
-airflow@ip-172-31-54-137:~/$ pwd
-/var/lib/airflow
-airflow@ip-172-31-54-137:~/$ echo $AIRFLOW_HOME
-/var/lib/airflow
 ```
