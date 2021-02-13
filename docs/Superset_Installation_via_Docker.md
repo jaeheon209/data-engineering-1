@@ -8,8 +8,8 @@ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 sudo systemctl enable docker
 sudo systemctl start docker
 
-git clone https://github.com/apache/incubator-superset/
-cd incubator-superset
+git clone https://github.com/apache/superset/
+cd superset
 sudo docker-compose up &
 ```
 
