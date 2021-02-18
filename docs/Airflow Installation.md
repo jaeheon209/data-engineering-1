@@ -214,8 +214,8 @@ airflow@ip-172-31-54-137:~/$ echo $AIRFLOW_HOME
 
 First install flask_bcrypt & werkzeug as sudo user:
 ```
-pip3 install flask_bcrypt
-pip3 install -U Werkzeug==0.16.0
+sudo pip3 install flask_bcrypt
+sudo pip3 install -U Werkzeug==0.16.0
 ```
 
 Next update "webserver" section. of airflow.cfg and make the following two changes:
