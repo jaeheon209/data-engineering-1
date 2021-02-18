@@ -212,7 +212,7 @@ airflow@ip-172-31-54-137:~/$ echo $AIRFLOW_HOME
 ## Add authentication to Airflow Webserver
 
 
-First install flask_bcrypt & werkzeug as airflow user:
+First install flask_bcrypt & werkzeug as sudo user:
 ```
 pip3 install flask_bcrypt
 pip3 install -U Werkzeug==0.16.0
