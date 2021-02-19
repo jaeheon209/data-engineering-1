@@ -6,6 +6,8 @@ from airflow.exceptions import AirflowException
 from airflow.hooks.postgres_hook import PostgresHook
 from airflow.operators.python_operator import PythonOperator
 
+import logging
+from glob import glob
 """
 Build a summary table under analytics schema in Redshift
 - Check the input tables readiness first
@@ -13,6 +15,68 @@ Build a summary table under analytics schema in Redshift
 - Before swapping, check the size of the temp table
 - Finally swap
 """
+def load_all_jsons_into_list(path_to_json):
+
+    configs = []
+    for f_name in glob(path_to_json+ '/*.py'):
+        # logging.info(f_name)
+        with open(f_name) as f:
+            dict_text = f.read()
+            try:
+                dict = eval(dict_text)
+            except Exception as e:
+                logging.info(str(e))
+                raise
+            else:
+                configs.append(dict)
+
+    return configs
+
+
+def find(table_name, table_confs):
+    """
+    scan through table_confs and see if there is a table matching table_name
+    """
+    for table in table_confs:
+        if table.get("table") == table_name:
+            return table
+
+    return None
+
+
+def build_summary_table(dag_root_path, dag, tables_load, redshift_conn_id, start_task=None):
+    logging.info(dag_root_path)
+    table_confs = load_all_jsons_into_list(dag_root_path + "/config/")
+
+    if start_task is not None:
+        prev_task = start_task
+    else:
+        prev_task = None
+
+    for table_name in tables_load:
+
+        table = find(table_name, table_confs)
+        summarizer = RedshiftSummaryOperator(
+            table=table["table"],
+            schema=table["schema"],
+            redshift_conn_id=redshift_conn_id,
+            input_check=table["input_check"],
+            main_sql=table["main_sql"],
+            output_check=table["output_check"],
+            overwrite=table.get("overwrite", True),
+            after_sql=table.get("after_sql"),
+            pre_sql=table.get("pre_sql"),
+            datefield=table.get("datefield"),
+            datefield_type=table.get("datefield_type"),
+            attributes=table.get("attributes", ""),
+            dag=dag,
+            task_id="anayltics"+"__"+table["table"]
+        )
+        if prev_task is not None:
+            prev_task >> summarizer
+        prev_task = summarizer
+    return prev_task
+
 
 def redshift_sql_function(**context):
     """this is a main Python callable function which runs a given SQL
