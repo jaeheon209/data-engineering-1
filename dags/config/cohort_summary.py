@@ -25,7 +25,7 @@
           [
             {
               'sql': 'SELECT COUNT(1) FROM {schema}.temp_{table}',
-              'count': 101000
+              'count': 4000
             }
           ],
 }
